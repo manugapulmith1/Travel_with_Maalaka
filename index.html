@@ -389,25 +389,41 @@
         }
 
         /* Photo Stack Layout */
-        .about-photos-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-            align-items: start;
-        }
+        /* Base (mobile-first) */
+.about-photos-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;                /* more breathing room on phone */
+    width: 100%;
+    align-items: center;      /* center images for better look */
+}
 
-       .about-photos-stack img {
-            width: calc(75% - 25px); /* Roughly 3 per row */
-            height: auto;
-            max-height: 200px; /* Limit height for horizontal layout */
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            object-fit: cover; /* Cover for neat gallery look in row */
-        }
+.about-photos-stack img {
+    width: 100%;              /* full width on mobile – key change */
+    max-width: 420px;         /* optional cap so not huge on very wide phones */
+    height: auto;
+    max-height: 280px;        /* taller than before, adjust to taste */
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    object-fit: cover;        /* or 'contain' if you don't want any crop */
+}
 
-        }
-
+/* Desktop / larger screens */
+@media (min-width: 769px) {
+    .about-wrapper {
+        grid-template-columns: 1.5fr 1fr;
+        gap: 50px;
+    }
+    
+    .about-photos-stack {
+        align-items: start;   /* back to left-align if preferred */
+    }
+    
+    .about-photos-stack img {
+        width: calc(75% - 25px);  /* keep your original narrow look on desktop */
+        max-height: 220px;        /* or your original 200px */
+    }
+}
         /* --- Memories Slideshow --- */
         .memories-slideshow {
             position: relative;
@@ -1177,6 +1193,7 @@ Fast WhatsApp replies, felt completely safe and cared for. Highly recommend for 
 </body>
 
 </html>
+
 
 
 
