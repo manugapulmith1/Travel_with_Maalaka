@@ -1,17 +1,26 @@
-// Mobile Navigation Toggle
+// Mobile Navigation Toggle + Click-outside-to-close (improved for mobile)
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('nav-links');
 
-hamburger.addEventListener('click', () => {
+// Toggle menu when clicking/tapping hamburger
+hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();           // Prevent the click from closing the menu immediately
     navLinks.classList.toggle('active');
 });
 
+// Close menu when clicking/tapping any menu link
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {
         navLinks.classList.remove('active');
     });
 });
 
+// Close menu when clicking/tapping anywhere outside the menu or hamburger
+document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+        navLinks.classList.remove('active');
+    }
+});
 // Hero Slideshow
 const heroSlides = document.querySelectorAll('.hero-slide');
 let heroIndex = 0;
@@ -72,4 +81,5 @@ setInterval(() => {
 }, 5000);
 
 // Initialize
+
 memShowSlides(memIndex);
