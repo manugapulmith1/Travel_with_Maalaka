@@ -732,3 +732,8 @@ footer {
 .faq-answer li {
     margin-bottom: 8px;
 }
+
+.nav-links a[href="#faq"] {
+    font-weight: 600;
+    color: var(--gold) !important;   /* optional – makes it gold to highlight */
+}
