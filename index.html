@@ -555,6 +555,29 @@ body.dark .fleet-body p,body.dark .fleet-meta{color:var(--ink-400);}
 @media(max-width:640px){.about-story-panel{padding:25px 20px;border-radius:16px;}.journey-path{grid-template-columns:1fr 1fr;gap:14px 10px;}.journey-icon{width:42px;height:42px;}.journey-stop small{font-size:.58rem;}}
 /* Dark-mode readability for the story panel */
 .dark .about-story-panel{box-shadow:0 18px 45px rgba(0,0,0,.24);}
+
+/* ---------------- MOBILE UX POLISH ---------------- */
+.days-stepper{display:grid;grid-template-columns:42px minmax(0,1fr) 42px;align-items:center;width:100%;height:42px;border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.07);border-radius:8px;overflow:hidden;}
+.days-stepper input{width:100%!important;height:40px!important;border:0!important;border-radius:0!important;background:transparent!important;text-align:center;padding:0!important;font-weight:800;font-size:.86rem!important;color:#fff!important;box-shadow:none!important;-moz-appearance:textfield;}
+.days-stepper input::-webkit-outer-spin-button,.days-stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.days-stepper-btn{height:100%;width:100%;border:0;background:rgba(255,255,255,.06);color:var(--gold-300);font-size:1.25rem;font-weight:800;cursor:pointer;display:grid;place-items:center;transition:background .2s ease,color .2s ease;touch-action:manipulation;}
+.days-stepper-btn:hover,.days-stepper-btn:focus-visible{background:rgba(216,173,85,.18);color:#fff;outline:none;}
+.days-stepper-btn:active{background:rgba(216,173,85,.28);}
+body.dark .days-stepper{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.08);}
+body.dark .days-stepper input{color:#fff!important;}
+body.dark .mobile-cta .btn-ghost-white{color:#fff!important;border-color:rgba(255,255,255,.65)!important;background:rgba(255,255,255,.08)!important;}
+.mobile-cta .btn-ghost-white{color:#fff!important;border-color:rgba(255,255,255,.65);background:rgba(255,255,255,.08);}
+@media (max-width:900px){
+  .theme-toggle{display:grid!important;place-items:center;width:38px;height:38px;flex:0 0 38px;margin-left:auto;margin-right:8px;z-index:1101;}
+  .nav-wrapper{gap:0;}
+  .hamburger{flex:0 0 auto;}
+}
+@media (max-width:560px){
+  .days-stepper{height:46px;grid-template-columns:48px minmax(0,1fr) 48px;border-radius:9px;}
+  .days-stepper input{height:44px!important;font-size:.95rem!important;}
+  .days-stepper-btn{font-size:1.35rem;}
+  .theme-toggle{width:36px;height:36px;flex-basis:36px;margin-right:6px;}
+}
 </style>
 </head>
 <body>
@@ -806,7 +829,11 @@ body.dark .fleet-body p,body.dark .fleet-meta{color:var(--ink-400);}
       <div class="estimator-form">
         <div class="estimator-field">
           <label for="estimate-days">Trip Duration (Days)</label>
-          <input type="number" id="estimate-days" min="1" max="30" value="5" inputmode="numeric">
+          <div class="days-stepper" role="group" aria-label="Trip duration in days">
+              <button type="button" class="days-stepper-btn" id="days-minus" aria-label="Decrease trip duration">−</button>
+              <input type="number" id="estimate-days" min="1" max="30" value="5" inputmode="numeric" aria-label="Trip duration in days">
+              <button type="button" class="days-stepper-btn" id="days-plus" aria-label="Increase trip duration">+</button>
+            </div>
         </div>
         <div class="estimator-field">
           <label for="estimate-travellers">Travellers</label>
@@ -1385,6 +1412,19 @@ function updateEstimate(){
   const high=low+100+(days>7?(days-7)*15:0);
   estimatePrice.textContent=`$${Math.round(low)} - $${Math.round(high)}`;
 }
+
+const daysMinus=document.getElementById('days-minus');
+const daysPlus=document.getElementById('days-plus');
+function changeDays(delta){
+  if(!estimateDays) return;
+  const current=parseInt(estimateDays.value||5,10);
+  const next=Math.max(1,Math.min(30,current+delta));
+  estimateDays.value=next;
+  updateEstimate();
+  estimateDays.focus();
+}
+daysMinus?.addEventListener('click',()=>changeDays(-1));
+daysPlus?.addEventListener('click',()=>changeDays(1));
 estimateDays?.addEventListener('input',updateEstimate);
 estimateTravellers?.addEventListener('change',updateEstimate);
 updateEstimate();
